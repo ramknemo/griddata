@@ -33,7 +33,7 @@ export class AppComponent  implements OnInit,AfterViewChecked{
   // ];
   desserts: Dessert[] = [];
   sortedData: Dessert[];
-  position: string;
+  position: string = "-1";
   constructor(private http: HttpClient, public dialog: MatDialog) {
     addEventListener("keydown",(e)=>{
       if(e.code=="ShiftLeft"){
