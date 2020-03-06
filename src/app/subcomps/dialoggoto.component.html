@@ -1,0 +1,13 @@
+<div>
+<div mat-dialog-content>
+  <p>Input position to go to?</p>
+  <mat-form-field>
+    <mat-label>Position</mat-label>
+    <input matInput [(ngModel)]="data.position">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.position" cdkFocusInitial>Ok</button>
+</div>
+</div>

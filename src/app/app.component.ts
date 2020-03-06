@@ -1,7 +1,9 @@
 import { Component, OnChanges, SimpleChanges, OnInit,AfterViewChecked } from '@angular/core';
 import {Sort} from '@angular/material/sort';
 import { HttpClient} from '@angular/common/http';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
+import {DialogGotoComponent} from './subcomps/dialoggoto.component'
 export interface Dessert {
   calories: number;
   carbs: number;
@@ -15,6 +17,10 @@ export interface Dessert {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
+
+
+
 export class AppComponent  implements OnInit,AfterViewChecked{
   title = 'griddataapp';
 
@@ -27,15 +33,33 @@ export class AppComponent  implements OnInit,AfterViewChecked{
   // ];
   desserts: Dessert[] = [];
   sortedData: Dessert[];
-  
-  constructor(private http: HttpClient) {
+  position: string;
+  constructor(private http: HttpClient, public dialog: MatDialog) {
+    addEventListener("keydown",(e)=>{
+      if(e.code=="ShiftLeft"){
+        console.log(e.code);
+        this.openDialog();
+      }
+      
+    });
     
   }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogGotoComponent, {
+      width: '250px',
+      data: {position: this.position}
+    });
 
-  ngAfterViewChecked(){
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.position = result;
+    });
+  }
+
+  ngAfterViewChecked(): void{
     //this.http.get('assets/tableGridData.json').subscribe((data: Dessert[]) => this.desserts=data);
   }
-  ngOnInit(){
+  ngOnInit(): void{
     this.setDatas();
     this.sortedData = this.desserts.slice();
     //this.setDatas();
@@ -43,7 +67,7 @@ export class AppComponent  implements OnInit,AfterViewChecked{
     //this.http.get('assets/tableGridData.json').subscribe((data: Dessert[]) => this.desserts=data);
   }
 
-  setDatas(){
+  setDatas(): void{
     //this.desserts=[{name: 'Frozen yogurt XXX', calories: 159, fat: 6, carbs: 24, protein: 4}];
     this.http.get('assets/tableGridData.json').subscribe((data: Dessert[]) => {this.desserts=data ; this.sortedData = this.desserts.slice();});
   }
