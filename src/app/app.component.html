@@ -3,10 +3,10 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
   </mat-form-field>
-  <button mat-button (click)="clickBut1()" >Click me!</button>
+  <!-- <button mat-button (click)="clickBut1()" >Click me!</button>
   <br />
   {{position}}
-  <br />
+  <br /> -->
   <div class="griddata-container">
     <table matSort (matSortChange)="sortData($event)" class="mat-elevation-z8" id="gridTableId">
       <tr>
@@ -16,6 +16,42 @@
         <th mat-sort-header="carbs">Carbs (g)</th>
         <th mat-sort-header="protein">Protein (g)</th>
       </tr>
+       <tr>
+        <th ><button mat-button [matMenuTriggerFor]="menu">Menu</button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>Фильтр по строке</button>
+            <button mat-menu-item>Сортировка по условию</button>
+          </mat-menu></th>
+
+        <th ><button mat-button [matMenuTriggerFor]="animals">Menu</button>
+
+          <mat-menu #animals="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="vertebrates">Фильтр по строке</button>
+            <button mat-menu-item [matMenuTriggerFor]="invertebrates">Сортировка по условию</button>
+          </mat-menu>
+          
+          <mat-menu #vertebrates="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="fish">Sort</button>
+
+
+          </mat-menu>
+          
+          <mat-menu #invertebrates="matMenu">
+            <button mat-menu-item>Apply</button>
+
+          </mat-menu>
+          
+          <mat-menu #fish="matMenu">
+            <button mat-menu-item>ASC</button>
+            <button mat-menu-item>DSC</button>
+
+          </mat-menu>
+          
+         </th>
+        <th >Menu</th>
+        <th >Menu</th>
+        <th >Menu</th>
+      </tr> 
 
       <tr *ngFor="let dessert of sortedData; let i = index" [class.isredbox]="i%2==0"  [class.isrowbold]="i==position"  >
         <td>{{dessert.name}}</td>

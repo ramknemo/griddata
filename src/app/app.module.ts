@@ -13,6 +13,10 @@ import { FormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatGridListModule} from '@angular/material/grid-list';
+
+
 @NgModule({
   declarations: [
     AppComponent,DialogGotoComponent
@@ -28,7 +32,9 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     FormsModule,
     MatInputModule,
     MatButtonModule,
-    ScrollingModule
+    ScrollingModule,
+    MatMenuModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
