@@ -21,19 +21,16 @@ export interface Dessert {
 
 
 
-export class AppComponent  implements OnInit,AfterViewChecked{
+export class AppComponent  implements OnInit{
   title = 'griddataapp';
 
-  // desserts: Dessert[] = [
-  //   {name: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4},
-  //   {name: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4},
-  //   {name: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6},
-  //   {name: 'Cupcake', calories: 305, fat: 4, carbs: 67, protein: 4},
-  //   {name: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 4},
-  // ];
   desserts: Dessert[] = [];
   sortedData: Dessert[];
   position: string = "-1";
+  lastSortMode:Sort;
+  isUseFilter: boolean = false;
+
+
   constructor(private http: HttpClient, public dialog: MatDialog) {
     addEventListener("keydown",(e)=>{
       if(e.code=="ShiftLeft"){
@@ -44,6 +41,34 @@ export class AppComponent  implements OnInit,AfterViewChecked{
     });
     
   }
+
+
+  applyFilter(event: Event) {
+    console.log("apply filter");
+ 
+    const filterValue = (event.target as HTMLInputElement).value;
+    const trimLowerFilterValue = filterValue.trim().toLowerCase();
+    if (trimLowerFilterValue.length == 0) {     //If do not use filter must see all data in last choodes sort mode
+      this.isUseFilter = false;
+      if (this.lastSortMode) {
+        this.sortData(this.lastSortMode);
+      } else {
+
+      }
+    } else {
+      this.isUseFilter = true;
+      const data = this.desserts.slice();
+      this.sortedData = data.filter((el, ind, arr) => {
+        let pred1 = el.calories.toString().includes(trimLowerFilterValue);
+        let pred2 = el.carbs.toString().includes(trimLowerFilterValue);
+        let pred3 = el.fat.toString().includes(trimLowerFilterValue);
+        let pred4 = el.protein.toString().includes(trimLowerFilterValue);
+        let pred5 = el.name.toString().trim().toLowerCase().includes(trimLowerFilterValue);
+        return (pred1 || pred2 || pred3 || pred4 || pred5);
+      });
+    }
+  }
+
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogGotoComponent, {
       width: '250px',
@@ -56,24 +81,33 @@ export class AppComponent  implements OnInit,AfterViewChecked{
     });
   }
 
-  ngAfterViewChecked(): void{
-    //this.http.get('assets/tableGridData.json').subscribe((data: Dessert[]) => this.desserts=data);
+  clickBut1(): void{
+    console.log("click");
+    let sort1:Sort = {active:"protein", direction:"asc"};
+    this.sortData(this.lastSortMode);
   }
+
   ngOnInit(): void{
     this.setDatas();
     this.sortedData = this.desserts.slice();
-    //this.setDatas();
-    //console.log("datas="+this.);
-    //this.http.get('assets/tableGridData.json').subscribe((data: Dessert[]) => this.desserts=data);
   }
 
   setDatas(): void{
-    //this.desserts=[{name: 'Frozen yogurt XXX', calories: 159, fat: 6, carbs: 24, protein: 4}];
-    this.http.get('assets/tableGridData.json').subscribe((data: Dessert[]) => {this.desserts=data ; this.sortedData = this.desserts.slice();});
+    this.http.get('assets/tableGridData.json').
+    subscribe((data: Dessert[]) => {this.desserts=data ; this.sortedData = this.desserts.slice();});
   }
 
   sortData(sort: Sort) {
-    const data = this.desserts.slice();
+    console.log("sorted data before sort=", this.sortedData);
+    this.lastSortMode = sort;
+    let data;
+
+    if(this.isUseFilter==true){
+      data=this.sortedData.slice();
+    }else{
+      data = this.desserts.slice();
+    }
+
     if (!sort.active || sort.direction === '') {
       this.sortedData = data;
       return;
@@ -90,6 +124,8 @@ export class AppComponent  implements OnInit,AfterViewChecked{
         default: return 0;
       }
     });
+
+    console.log("sorted data after sort=", this.sortedData);
   }
 }
 

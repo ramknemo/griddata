@@ -1,5 +1,9 @@
 <div>
-  <mat-slider min="1" max="100" step="1" value="1"></mat-slider>
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+  </mat-form-field>
+  <button mat-button (click)="clickBut1()" >Click me!</button>
   <br />
   {{position}}
   <br />

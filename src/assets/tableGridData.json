@@ -1,5 +1,7 @@
 [
-    {"name": "Frozen yogurt1", "calories": "159", "fat": "6", "carbs": "24", "protein": "46"},
-    {"name": "Frozen yogurt2", "calories": "159", "fat": "4", "carbs": "243", "protein": "4"},
-    {"name": "Frozen yogurt3", "calories": "159", "fat": "63", "carbs": "24", "protein": "42"}
+    {"name": "Frozen yogurt1", "calories": 159, "fat": 6, "carbs": 24, "protein": 46},
+    {"name": "Frozen yogurt2", "calories": 160, "fat": 4, "carbs": 243, "protein": 4},
+    {"name": "Frozen yogurt3", "calories": 163, "fat": 63, "carbs": 29, "protein": 159},
+    {"name": "Frozen yogurt4", "calories": 90, "fat": 10, "carbs": 6, "protein": 48},
+    {"name": "Frozen yogurt5", "calories": 57, "fat": 36, "carbs": 159, "protein": 5}
 ]
