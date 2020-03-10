@@ -16,6 +16,7 @@ export interface Dessert {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
+  
 })
 
 
@@ -23,7 +24,7 @@ export interface Dessert {
 
 export class AppComponent  implements OnInit{
   title = 'griddataapp';
-
+  items = Array.from({length: 100000}).map((_, i) => `Item #${i}`);
   desserts: Dessert[] = [];
   sortedData: Dessert[];
   position: string = "-1";
@@ -53,6 +54,7 @@ export class AppComponent  implements OnInit{
       if (this.lastSortMode) {
         this.sortData(this.lastSortMode);
       } else {
+        this.sortedData = this.desserts.slice();
 
       }
     } else {
@@ -78,13 +80,32 @@ export class AppComponent  implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.position = result;
+      if(result>=0){
+        var elems = document.getElementById("gridTableId").childNodes;
+        var offPos = elems[this.position].getBoundingClientRect().y+pageYOffset;
+        window.scroll(0,offPos);
+        console.log("change pos to ",offPos);
+      }
+      
+      
     });
   }
 
   clickBut1(): void{
-    console.log("click");
-    let sort1:Sort = {active:"protein", direction:"asc"};
-    this.sortData(this.lastSortMode);
+    //console.log("click");
+    //let sort1:Sort = {active:"protein", direction:"asc"};
+    //this.sortData(this.lastSortMode);
+
+    //go to
+    //document.getElementsByTagName("body").scrollTop=200;
+    
+    // for(var i=0;i<elems.length;i++){
+    //   console.log("i"+i);
+    //   console.log(elems[i].getBoundingClientRect().y);
+
+    // }
+    
+
   }
 
   ngOnInit(): void{
@@ -93,7 +114,7 @@ export class AppComponent  implements OnInit{
   }
 
   setDatas(): void{
-    this.http.get('assets/tableGridData.json').
+    this.http.get('assets/tableGridData_big.json').
     subscribe((data: Dessert[]) => {this.desserts=data ; this.sortedData = this.desserts.slice();});
   }
 
