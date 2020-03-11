@@ -16,10 +16,11 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
-
+import {MatTableModule} from '@angular/material/table';
+import {RowColorDirective} from './directives/row.color.directive'
 @NgModule({
   declarations: [
-    AppComponent,DialogGotoComponent
+    AppComponent,DialogGotoComponent,RowColorDirective
   ],
   imports: [
     BrowserModule,
@@ -35,7 +36,9 @@ import {MatCardModule} from '@angular/material/card';
     ScrollingModule,
     MatMenuModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

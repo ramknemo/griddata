@@ -1,32 +1,5 @@
-.isredbox{background-color:rgb(236, 233, 233);}
+table {
+  width: 100%;
+}
 
-
-.isrowbold{ font-weight: bold;}
-.griddata-container {
-
-    overflow: auto;
-    
-  }
-
-  table {
-    width: 100%; 
-   }
-
-  .example-viewport {
-    height: 200px;
-    width: 200px;
-    border: 1px solid black;
-  }
   
-  .example-item {
-    height: 50px;
-  }
-  .mat-header-cell {
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .mat-cell {
-    text-align: center;
-    justify-content:center;
-  }
