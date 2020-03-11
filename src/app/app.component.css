@@ -8,6 +8,9 @@
     
   }
 
+  table {
+    width: 100%; 
+   }
 
   .example-viewport {
     height: 200px;
@@ -18,4 +21,12 @@
   .example-item {
     height: 50px;
   }
+  .mat-header-cell {
+    flex-direction: column;
+    justify-content: center;
+  }
   
+  .mat-cell {
+    text-align: center;
+    justify-content:center;
+  }
