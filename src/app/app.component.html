@@ -1,14 +1,3 @@
-<!-- <mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup>
-  <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
-    <mat-header-cell *matHeaderCellDef
-      (mousedown)="onResizeColumn($event, i)">
-      {{ column.field }}
-    </mat-header-cell>
-    <mat-cell *matCellDef="let row" > {{ row[column.field] }}  </mat-cell>
-  </ng-container>
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table> -->
 
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup matSort>
@@ -21,7 +10,7 @@
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" [rowColorAttr]="i" [class.isredbox]="i%2==0"   ></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" [rowColorAttr]="i" [class.isColoredRow]="i%2==0"   ></mat-row>
 </mat-table>
 
 
