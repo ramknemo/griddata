@@ -18,6 +18,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
 import {RowColorDirective} from './directives/row.color.directive'
+import {MatPaginatorModule} from '@angular/material/paginator';
+
 @NgModule({
   declarations: [
     AppComponent,DialogGotoComponent,RowColorDirective
@@ -37,7 +39,8 @@ import {RowColorDirective} from './directives/row.color.directive'
     MatMenuModule,
     MatGridListModule,
     MatCardModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
     
   ],
   providers: [],
