@@ -13,15 +13,15 @@
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup matSort>
   <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
-    <mat-header-cell *matHeaderCellDef mat-sort-header
+    <mat-header-cell *matHeaderCellDef 
       (mousedown)="onResizeColumn($event, i)">
-      {{ column.field }}
+      <div mat-sort-header>{{ column.field }}</div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let row" > {{ row[column.field] }}  </mat-cell>
+    <mat-cell *matCellDef="let row;let i = index;"  > {{ row[column.field] }}  </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" [rowColorAttr]="i" ></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" [rowColorAttr]="i" [class.isredbox]="i%2==0"   ></mat-row>
 </mat-table>
 
 
