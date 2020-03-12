@@ -1,4 +1,4 @@
-export let data=[
+export let dataFromServer=[
     {
       "id": 0,
       "name": "GOLISTIC",

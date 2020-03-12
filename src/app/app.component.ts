@@ -5,7 +5,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import {DialogGotoComponent} from './subcomps/dialoggoto.component'
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {data} from "./data"
+import {dataFromServer} from "./data"
 import {MatTable} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {PageEvent} from '@angular/material/paginator';
@@ -17,7 +17,7 @@ export interface Deal{
   type: string;
 }
 
-const deals: Deal[] = data;
+const deals: Deal[] = dataFromServer;
 
 @Component({
   selector: 'app-root',
@@ -26,9 +26,13 @@ const deals: Deal[] = data;
   
 })
 export class AppComponent implements OnInit,AfterViewInit{
+
+  lastSortMode:Sort;
+  isUseFilter: boolean = false;
+
   savedEventWindowResize:Event;
   displayedColumns: string[] = ['id','name','summ','inn','type'];
-  dataSource = new MatTableDataSource(deals);
+  dataSource = deals;//new MatTableDataSource(deals);
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: true}) sort: MatSort;
@@ -40,18 +44,12 @@ export class AppComponent implements OnInit,AfterViewInit{
   }
 
   ngOnInit(){
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+
   }
 
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
 
@@ -190,5 +188,41 @@ export class AppComponent implements OnInit,AfterViewInit{
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
   }
 
+  sortData(sort: Sort) {
+    console.log("sorted data before sort=", this.dataSource);
+    this.lastSortMode = sort;
+    let data1;
 
+    if(this.isUseFilter==true){
+      data1=this.dataSource.slice();
+    }else{
+      data1 = this.dataSource.slice();
+    }
+
+    if (!sort.active || sort.direction === '') {
+      this.dataSource = data1;
+      return;
+    }
+
+    this.dataSource = data1.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'id': return compare(a.id, b.id, isAsc);
+        case 'name': return compare(a.name, b.name, isAsc);
+        case 'summ': return compare(a.summ, b.summ, isAsc);
+        case 'inn': return compare(a.inn, b.inn, isAsc);
+        case 'type': return compare(a.type, b.type, isAsc);
+        default: return 0;
+      }
+    });
+
+    console.log("sorted data after sort=", this.dataSource);
+  }
+
+
+}
+
+
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
