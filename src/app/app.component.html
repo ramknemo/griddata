@@ -7,7 +7,11 @@ Used filtering:
 <button mat-button  >Apply!</button>
 
 <button mat-button (click)="testClick()" >Click!</button>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" (page)="handlePager($event)" ></mat-paginator>
+<mat-paginator (page)="pageEvent = $event;handlePager($pageEvent);"
+[length]="length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+></mat-paginator>
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup matSort (matSortChange)="sortData($event)" >
    <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
     <mat-header-cell *matHeaderCellDef 

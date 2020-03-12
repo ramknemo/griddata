@@ -26,6 +26,11 @@ const deals: Deal[] = dataFromServer;
   
 })
 export class AppComponent implements OnInit,AfterViewInit{
+  pageEvent: PageEvent;
+  length = 100;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+
 
   lastSortMode:Sort;
   isUseFilter: boolean = false;
@@ -159,7 +164,6 @@ export class AppComponent implements OnInit,AfterViewInit{
   }
 
   setColumnWidth(column: any) {
-    
     const columnEls = Array.from( document.getElementsByClassName('mat-column-' + column.field) );
     console.log("set width col ", column.field , " on ",columnEls.length);
     columnEls.forEach(( el: HTMLDivElement ) => {
@@ -172,16 +176,22 @@ export class AppComponent implements OnInit,AfterViewInit{
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    console.log("onResize ",this.matTableRef.nativeElement.clientWidth);
+    //console.log("onResize ",this.matTableRef.nativeElement.clientWidth);
     this.savedEventWindowResize=event;
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
   }
 
 
-  handlePager(event){
+  handlePager(event:PageEvent){
     console.log("handlePager");
-    this.setTableResize(this.matTableRef.nativeElement.clientWidth);
-    window.dispatchEvent(new Event("resize"));
+    let indCur = this.pageEvent.pageIndex;
+    this.showPage(indCur);
+    
+  }
+
+  showPage(ind:number){
+    let beg = ind*this.pageSize;
+    this.dataSource = dataFromServer.slice().filter((elem,indArr)=>{return indArr<10;})
   }
   testClick(){
     console.log("testClick");
