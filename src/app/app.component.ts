@@ -8,6 +8,7 @@ import {MatSort} from '@angular/material/sort';
 import {data} from "./data"
 import {MatTable} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
+import {PageEvent} from '@angular/material/paginator';
 export interface Deal{
   id: number;
   name: string;
@@ -25,14 +26,17 @@ const deals: Deal[] = data;
   
 })
 export class AppComponent implements OnInit,AfterViewInit{
+  savedEventWindowResize:Event;
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: true}) sort: MatSort;
   @ViewChild(MatTable, {read: ElementRef} ) private matTableRef: ElementRef;
+  
 
-  constructor(private http: HttpClient,private renderer: Renderer2) {
+  constructor(private http: HttpClient,private renderer: Renderer2, public dialog: MatDialog) {
+
   }
 
   ngOnInit(){
@@ -71,9 +75,11 @@ export class AppComponent implements OnInit,AfterViewInit{
   isResizingRight: boolean;
   resizableMousemove: () => void;
   resizableMouseup: () => void;
+
   ngAfterViewInit() {
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
   }
+
   setTableResize(tableWidth: number) {
     let totWidth = 0;
     this.columns.forEach(( column) => {
@@ -94,6 +100,7 @@ export class AppComponent implements OnInit,AfterViewInit{
   }
 
   onResizeColumn(event: any, index: number) {
+    console.log("onResizeColumn");
     this.checkResizing(event, index);
     this.currentResizeIndex = index;
     this.pressed = true;
@@ -154,14 +161,34 @@ export class AppComponent implements OnInit,AfterViewInit{
   }
 
   setColumnWidth(column: any) {
+    
     const columnEls = Array.from( document.getElementsByClassName('mat-column-' + column.field) );
+    console.log("set width col ", column.field , " on ",columnEls.length);
     columnEls.forEach(( el: HTMLDivElement ) => {
-      el.style.width = column.width + 'px';
+      console.log("low set width "+column);
+      this.renderer.setStyle(el,"width",column.width + 'px');
+      //el.style.width = column.width + 'px';
     });
+
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
+    console.log("onResize ",this.matTableRef.nativeElement.clientWidth);
+    this.savedEventWindowResize=event;
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
   }
+
+
+  handlePager(event){
+    console.log("handlePager");
+    this.setTableResize(this.matTableRef.nativeElement.clientWidth);
+    window.dispatchEvent(new Event("resize"));
+  }
+  testClick(){
+    console.log("testClick");
+    this.setTableResize(this.matTableRef.nativeElement.clientWidth);
+  }
+
+
 }

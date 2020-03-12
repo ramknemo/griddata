@@ -2,16 +2,21 @@
   <mat-label>Filter</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia">
 </mat-form-field>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+Used filtering:
+
+<button mat-button  >Apply!</button>
+
+<button mat-button (click)="testClick()" >Click!</button>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" (page)="handlePager($event)" ></mat-paginator>
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup matSort>
-  <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
+   <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
     <mat-header-cell *matHeaderCellDef 
-      (mousedown)="onResizeColumn($event, i)">
+    (mousedown)="onResizeColumn($event, i)"
+      >
       <div mat-sort-header>{{ column.field }}</div>
     </mat-header-cell>
     <mat-cell *matCellDef="let row;let i = index;"  > {{ row[column.field] }}  </mat-cell>
-  </ng-container>
-
+  </ng-container> 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" [rowColorAttr]="i" [class.isColoredRow]="i%2==0"   ></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" ></mat-row>
 </mat-table>
