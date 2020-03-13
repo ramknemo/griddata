@@ -52,11 +52,17 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     }
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    
-    let cookiePagination:PageEvent = JSON.parse(this.cookieService.get("pagination"));
-    if(cookiePagination){
+     
+    if(this.cookieService.get("pagination")){
+      let cookiePagination:PageEvent = JSON.parse(this.cookieService.get("pagination"));
       this.dataSource.paginator.pageIndex = cookiePagination.pageIndex;
       this.dataSource.paginator.pageSize = cookiePagination.pageSize;
+    }
+    
+    if(this.cookieService.get("sort")){
+      let cookieSort:Sort = JSON.parse(this.cookieService.get("sort"));
+      this.dataSource.sort.direction = cookieSort.direction;
+      this.dataSource.sort.active = cookieSort.active;
     }
 
   }
@@ -120,7 +126,6 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   }
 
   onResizeColumn(event: any, index: number) {
-    console.log("onResizeColumn");
     this.checkResizing(event, index);
     this.currentResizeIndex = index;
     this.pressed = true;
@@ -181,17 +186,12 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   }
 
   setColumnWidth(column: any) {
-    
     const columnEls = Array.from( document.getElementsByClassName('mat-column-' + column.field) );
-    console.log("set width col ", column.field , " on ",columnEls.length);
     columnEls.forEach(( el: HTMLDivElement ) => {
-      console.log("low set width "+column);
       this.renderer.setStyle(el,"width",column.width + 'px');
       //el.style.width = column.width + 'px';
     });
-
     this.cookieService.set("sizeColumns",JSON.stringify(this.columns));     
-
   }
 
   @HostListener('window:resize', ['$event'])
@@ -205,7 +205,9 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
  
 
   }
-
+  sortData(sort: Sort) {
+    this.cookieService.set("sort",JSON.stringify(sort)); 
+  }
 
 
 
