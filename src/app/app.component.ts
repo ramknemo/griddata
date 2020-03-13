@@ -42,6 +42,9 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   ngOnInit(){
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    window.addEventListener('scroll', function() {
+      console.log("pageYOffset"+pageYOffset);
+    });
   }
   ngAfterViewChecked() {
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
