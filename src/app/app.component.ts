@@ -25,7 +25,7 @@ const deals: Deal[] = data;
   styleUrls: ['./app.component.css']
   
 })
-export class AppComponent implements OnInit,AfterViewInit{
+export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   savedEventWindowResize:Event;
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
@@ -38,12 +38,15 @@ export class AppComponent implements OnInit,AfterViewInit{
   constructor(private http: HttpClient,private renderer: Renderer2, public dialog: MatDialog) {
 
   }
-
+  
   ngOnInit(){
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
-
+  ngAfterViewChecked() {
+    this.setTableResize(this.matTableRef.nativeElement.clientWidth);
+    
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
