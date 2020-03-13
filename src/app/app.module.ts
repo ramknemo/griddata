@@ -19,7 +19,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
 import {RowColorDirective} from './directives/row.color.directive'
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import {CookieService} from 'ngx-cookie-service'
 @NgModule({
   declarations: [
     AppComponent,DialogGotoComponent,RowColorDirective
@@ -43,7 +43,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatPaginatorModule
     
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

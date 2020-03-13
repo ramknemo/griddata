@@ -9,6 +9,7 @@ import {data} from "./data"
 import {MatTable} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {PageEvent} from '@angular/material/paginator';
+import { CookieService } from 'ngx-cookie-service';
 export interface Deal{
   id: number;
   name: string;
@@ -29,17 +30,26 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   savedEventWindowResize:Event;
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
+  private cookieSize: any;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: true}) sort: MatSort;
   @ViewChild(MatTable, {read: ElementRef} ) private matTableRef: ElementRef;
   
 
-  constructor(private http: HttpClient,private renderer: Renderer2, public dialog: MatDialog) {
-
+  constructor(private http: HttpClient,
+    private renderer: Renderer2, 
+    public dialog: MatDialog,
+    private cookieService: CookieService) {
+      
   }
   
   ngOnInit(){
+    this.cookieSize = this.cookieService.get("sizeColumns");
+    if(this.cookieSize){
+      console.log(this.cookieSize);
+      this.columns = JSON.parse(this.cookieSize);
+    }
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     window.addEventListener('scroll', function() {
@@ -175,6 +185,8 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       this.renderer.setStyle(el,"width",column.width + 'px');
       //el.style.width = column.width + 'px';
     });
+
+    this.cookieService.set("sizeColumns",JSON.stringify(this.columns));//save to coolie every setting
 
   }
 
