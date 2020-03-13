@@ -18,6 +18,7 @@ export interface Deal{
   type: string;
 }
 
+
 const deals: Deal[] = data;
 
 @Component({
@@ -27,7 +28,6 @@ const deals: Deal[] = data;
   
 })
 export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
-  savedEventWindowResize:Event;
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
   private cookieSize: any;
@@ -52,9 +52,13 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     }
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    window.addEventListener('scroll', function() {
-      console.log("pageYOffset"+pageYOffset);
-    });
+    
+    let cookiePagination:PageEvent = JSON.parse(this.cookieService.get("pagination"));
+    if(cookiePagination){
+      this.dataSource.paginator.pageIndex = cookiePagination.pageIndex;
+      this.dataSource.paginator.pageSize = cookiePagination.pageSize;
+    }
+
   }
   ngAfterViewChecked() {
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
@@ -186,27 +190,23 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       //el.style.width = column.width + 'px';
     });
 
-    this.cookieService.set("sizeColumns",JSON.stringify(this.columns));//save to coolie every setting
+    this.cookieService.set("sizeColumns",JSON.stringify(this.columns));     
 
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    console.log("onResize ",this.matTableRef.nativeElement.clientWidth);
-    this.savedEventWindowResize=event;
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
   }
 
 
-  handlePager(event){
-    console.log("handlePager");
-    this.setTableResize(this.matTableRef.nativeElement.clientWidth);
-    window.dispatchEvent(new Event("resize"));
+  handleChangePage(event:PageEvent){
+    this.cookieService.set("pagination",JSON.stringify(event));   
+ 
+
   }
-  testClick(){
-    console.log("testClick");
-    this.setTableResize(this.matTableRef.nativeElement.clientWidth);
-  }
+
+
 
 
 }
