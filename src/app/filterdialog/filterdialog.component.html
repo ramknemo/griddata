@@ -1,0 +1,24 @@
+<div mat-dialog-content>
+    <p>Choose filter attributes</p>
+    <mat-form-field>
+      <mat-label>Attr</mat-label>
+      <input matInput [(ngModel)]="data.dataFromFilterDialog">
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label>Favorite food</mat-label>
+      <mat-select [(ngModel)]="data.selectedValue" name="food">
+        <mat-option *ngFor="let food of data.columns" [value]="food.field">
+          {{food.field}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Apply</button>
+  </div>

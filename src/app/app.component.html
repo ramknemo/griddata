@@ -1,3 +1,5 @@
+<button mat-button (click)="filterButtonClick()">Filter</button>
+{{filterChoosedInfo}}
 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" (page)="handleChangePage($event)" ></mat-paginator>
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup matSort (matSortChange)="sortData($event)">
    <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
@@ -10,4 +12,6 @@
   </ng-container> 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" ></mat-row>
+
+  
 </mat-table>

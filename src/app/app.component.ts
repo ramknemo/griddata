@@ -10,6 +10,7 @@ import {MatTable} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {PageEvent} from '@angular/material/paginator';
 import { CookieService } from 'ngx-cookie-service';
+import { FilterDialogComponent } from './filterdialog/filterdialog.component';
 export interface Deal{
   id: number;
   name: string;
@@ -31,6 +32,8 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
   private cookieSize: any;
+  dataFromFilterDialog: any;
+  filterChoosedInfo: string;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: true}) sort: MatSort;
@@ -209,6 +212,37 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     this.cookieService.set("sort",JSON.stringify(sort)); 
   }
 
+  filterButtonClick(){
+    this.openDialog();
+  }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(FilterDialogComponent, {
+      width: '250px',
+      data: {dataFromFilterDialog: this.dataFromFilterDialog,
+        columns:this.columns
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        console.log('The dialog was closed'+result.selectedValue);
+        this.dataFromFilterDialog = result.dataFromFilterDialog;
+        this.filterChoosedInfo = result.selectedValue;
+        let selectedFilterOptions = [{field:"id", }];
+
+
+        this.dataSource.filterPredicate = function(data, filter: string): boolean {
+
+          return true;
+        };
+
+
+      }
+      
+    });
+  }
 
 }
+
+

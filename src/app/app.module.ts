@@ -17,12 +17,14 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
-import {RowColorDirective} from './directives/row.color.directive'
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {CookieService} from 'ngx-cookie-service'
+import {FilterDialogComponent} from './filterdialog/filterdialog.component'
+import {MatSelectModule} from '@angular/material/select';
+
 @NgModule({
   declarations: [
-    AppComponent,DialogGotoComponent,RowColorDirective
+    AppComponent,DialogGotoComponent,FilterDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import {CookieService} from 'ngx-cookie-service'
     MatGridListModule,
     MatCardModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule
     
   ],
   providers: [CookieService],
