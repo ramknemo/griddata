@@ -32,8 +32,6 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
   private cookieSize: any;
-  dataFromFilterDialog: any;
-  filterChoosedInfo: string;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: true}) sort: MatSort;
@@ -218,25 +216,23 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
 
   openDialog(): void {
     const dialogRef = this.dialog.open(FilterDialogComponent, {
-      width: '250px',
-      data: {dataFromFilterDialog: this.dataFromFilterDialog,
+      width: '750px',
+      data: {
         columns:this.columns
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        console.log('The dialog was closed'+result.selectedValue);
-        this.dataFromFilterDialog = result.dataFromFilterDialog;
-        this.filterChoosedInfo = result.selectedValue;
+
+        
         let selectedFilterOptions = [{statType:"ARG",field:"type", type:"CONSIST", value:"brown"},
         {statType:"OPER", value:"AND"},
         {statType:"ARG",field:"name", type:"CONSIST", value:"CO"}];
 
-        console.log("before");
         
         this.dataSource.filterPredicate = (data:Deal, filter: string) => {
-          console.log("filter go with data="+data.id);
+          //console.log("filter go with data="+data.id);
           let resExpr: string="";
           for(let i=0;i<selectedFilterOptions.length;i++){      //first - calculating small predicates as parts of big statement
             if(selectedFilterOptions[i].statType=="ARG"){
@@ -247,8 +243,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
               resExpr+=" &&";
             }
           }
-          console.log("resExpr="+resExpr);
-          //return false;
+          //console.log("resExpr="+resExpr);
           return eval(resExpr);
         }
 
@@ -259,7 +254,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
 
   /*Val - column value of extact line, oper - filter settings*/
   predSmall(val:string, oper:any):boolean {
-    console.log("pred val="+val);
+    //console.log("pred val="+val);
     let res:boolean = false;
     switch(oper.type){
       case "BEGIN_WITH":
