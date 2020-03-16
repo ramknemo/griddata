@@ -1,7 +1,7 @@
 import { Component,Inject, OnChanges, SimpleChanges, OnInit,AfterViewChecked } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Deal} from '../app.component'
-
+import {TextFilterType, NumberFilterType} from './filter.config.constatnts'
 export interface DialogData {
   columns:any;
   selectedValue:string;
@@ -31,9 +31,9 @@ export class FilterDialogComponent {
   }
   ];
 
-  filterTypes: string[] = ["CONSIST", "BEGIN", "END"];
-  filterTypesForString: string[] = ["CONSIST", "BEGIN", "END"];
-  filterTypesForNumber: string[] = ["Bigger", "Slower", "Equals"];
+  
+  filterTypesForString: string[] = TextFilterType.getAllTypes();
+  filterTypesForNumber: string[] = NumberFilterType.getAllTypes();
   filterBoolOpersTypes: string[] = ["And", "Or"];
 
 

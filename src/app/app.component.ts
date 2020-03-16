@@ -11,6 +11,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {PageEvent} from '@angular/material/paginator';
 import { CookieService } from 'ngx-cookie-service';
 import { FilterDialogComponent } from './filterdialog/filterdialog.component';
+import {TextFilterType, NumberFilterType} from './filterdialog/filter.config.constatnts'
 export interface Deal{
   id: number;
   name: string;
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
   private cookieSize: any;
+  filterChoosedConfs:any;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: true}) sort: MatSort;
@@ -223,49 +225,76 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log("Filter config: "+JSON.stringify(result));
       if(result){
-
-        
-        let selectedFilterOptions = [{statType:"ARG",field:"type", type:"CONSIST", value:"brown"},
-        {statType:"OPER", value:"AND"},
-        {statType:"ARG",field:"name", type:"CONSIST", value:"CO"}];
-
-        
-        this.dataSource.filterPredicate = (data:Deal, filter: string) => {
-          //console.log("filter go with data="+data.id);
-          let resExpr: string="";
-          for(let i=0;i<selectedFilterOptions.length;i++){      //first - calculating small predicates as parts of big statement
-            if(selectedFilterOptions[i].statType=="ARG"){
-              let curUsedField = selectedFilterOptions[i].field;
-              resExpr+=" "+this.predSmall(data[curUsedField], selectedFilterOptions[i] );
-            }
-            else{
-              resExpr+=" &&";
-            }
-          }
-          //console.log("resExpr="+resExpr);
-          return eval(resExpr);
-        }
-
-        this.dataSource.filter = "111";
+        this.dataSource.filterPredicate = this.createFilter(result);
+        this.dataSource.filter = "starting run filter string";
       }
     });
   }
 
+  //returns filter function
+  createFilter(filterChoosedConfs: any[]) {
+    return (data: Deal, filter: string):boolean => {
+      let resExp: string = "";
+      if (filterChoosedConfs.length == 0) {
+        return false;
+      }
+      let curUsedField = filterChoosedConfs[0].field;
+      resExp += "" + this.predSmall(data[curUsedField], filterChoosedConfs[0].filterType, filterChoosedConfs[0].filterText);
+      if (filterChoosedConfs.length > 1) {
+        for (let i = 1; i < filterChoosedConfs.length; i++) {
+          switch (filterChoosedConfs[i].boolOper) {
+            case "And":
+              resExp += "&&";
+              break;
+            case "Or":
+              resExp += "||";
+              break;
+          }
+          curUsedField = filterChoosedConfs[i].field;
+          resExp += "" + this.predSmall(data[curUsedField], filterChoosedConfs[i].filterType, filterChoosedConfs[i].filterText);
+
+        }
+      }
+      console.log(resExp);
+      return eval(resExp);
+    };
+  }
+
   /*Val - column value of extact line, oper - filter settings*/
-  predSmall(val:string, oper:any):boolean {
+  predSmall(valFromTable:string, operType:string, value:string):boolean {
     //console.log("pred val="+val);
     let res:boolean = false;
-    switch(oper.type){
-      case "BEGIN_WITH":
-        
+    switch(operType){
+      case TextFilterType.BEGIN():
+        res = valFromTable.startsWith(value);
         break;
-      case "CONSIST":
-        res = val.includes(oper.value);
+      case TextFilterType.END():
+        res = valFromTable.endsWith(value);
+        break;
+      case TextFilterType.CONSIST():
+        res = valFromTable.includes(value);
+        break;
+      case NumberFilterType.BIGGER():
+        res = parseInt(value)>parseInt(valFromTable);
+        break; 
+      case NumberFilterType.SlOWER():
+        res = parseInt(value)<parseInt(valFromTable) 
+        break; 
+      case NumberFilterType.EQUALS(): 
+        res = parseInt(value)==parseInt(valFromTable)
         break;
     }
     return res;
   }
+  setOffFilter(){
+    this.dataSource.filterPredicate = (data: Deal, filter: string):boolean =>{return true;}
+    this.dataSource.filter = "starting run filter string";
+
+  }
+
+  
 
 }
 

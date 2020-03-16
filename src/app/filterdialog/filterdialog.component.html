@@ -13,16 +13,13 @@
 
       <mat-form-field>
         <mat-label>Field</mat-label>
-        <mat-select [(ngModel)]="conf.field" name="food">
-          <mat-option *ngFor="let food of data.columns" [value]="food.field">
-            {{food.field}}
+        <mat-select [(ngModel)]="conf.field" name="column">
+          <mat-option *ngFor="let column of data.columns" [value]="column.field">
+            {{column.field}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
-        <mat-label>Filter text</mat-label>
-        <input matInput [(ngModel)]="conf.filterText">
-      </mat-form-field>
+
       
       <mat-form-field *ngIf="conf.field && getTypeOfField(conf.field) === 'string' ">
         <mat-label>Type</mat-label>
@@ -41,10 +38,12 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
+      <mat-form-field>
+        <mat-label>Filter text</mat-label>
+        <input matInput [(ngModel)]="conf.filterText">
+      </mat-form-field>
       
     </p>
-
 
 
 
@@ -57,5 +56,5 @@
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="filterConf" cdkFocusInitial>Apply</button>
+    <button mat-button [mat-dialog-close]="filterChoosedConfs" cdkFocusInitial>Apply</button>
   </div>
