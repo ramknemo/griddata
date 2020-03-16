@@ -67,8 +67,8 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       this.dataSource.sort.direction = cookieSort.direction;
       this.dataSource.sort.active = cookieSort.active;
     }
-
   }
+
   ngAfterViewChecked() {
     this.setTableResize(this.matTableRef.nativeElement.clientWidth);
     
@@ -229,18 +229,47 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
         console.log('The dialog was closed'+result.selectedValue);
         this.dataFromFilterDialog = result.dataFromFilterDialog;
         this.filterChoosedInfo = result.selectedValue;
-        let selectedFilterOptions = [{field:"id", }];
+        let selectedFilterOptions = [{statType:"ARG",field:"type", type:"CONSIST", value:"brown"},
+        {statType:"OPER", value:"AND"},
+        {statType:"ARG",field:"name", type:"CONSIST", value:"CO"}];
 
+        console.log("before");
+        
+        this.dataSource.filterPredicate = (data:Deal, filter: string) => {
+          console.log("filter go with data="+data.id);
+          let resExpr: string="";
+          for(let i=0;i<selectedFilterOptions.length;i++){      //first - calculating small predicates as parts of big statement
+            if(selectedFilterOptions[i].statType=="ARG"){
+              let curUsedField = selectedFilterOptions[i].field;
+              resExpr+=" "+this.predSmall(data[curUsedField], selectedFilterOptions[i] );
+            }
+            else{
+              resExpr+=" &&";
+            }
+          }
+          console.log("resExpr="+resExpr);
+          //return false;
+          return eval(resExpr);
+        }
 
-        this.dataSource.filterPredicate = function(data, filter: string): boolean {
-
-          return true;
-        };
-
-
+        this.dataSource.filter = "111";
       }
-      
     });
+  }
+
+  /*Val - column value of extact line, oper - filter settings*/
+  predSmall(val:string, oper:any):boolean {
+    console.log("pred val="+val);
+    let res:boolean = false;
+    switch(oper.type){
+      case "BEGIN_WITH":
+        
+        break;
+      case "CONSIST":
+        res = val.includes(oper.value);
+        break;
+    }
+    return res;
   }
 
 }
