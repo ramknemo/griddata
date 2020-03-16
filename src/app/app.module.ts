@@ -21,7 +21,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {CookieService} from 'ngx-cookie-service'
 import {FilterDialogComponent} from './filterdialog/filterdialog.component'
 import {MatSelectModule} from '@angular/material/select';
-
+import {MatToolbarModule} from '@angular/material/toolbar';
 @NgModule({
   declarations: [
     AppComponent,DialogGotoComponent,FilterDialogComponent
@@ -43,7 +43,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatCardModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSelectModule
+    MatSelectModule,
+    MatToolbarModule
     
   ],
   providers: [CookieService],

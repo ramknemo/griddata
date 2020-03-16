@@ -12,6 +12,7 @@ import {PageEvent} from '@angular/material/paginator';
 import { CookieService } from 'ngx-cookie-service';
 import { FilterDialogComponent } from './filterdialog/filterdialog.component';
 import {TextFilterType, NumberFilterType} from './filterdialog/filter.config.constatnts'
+import {ConfFilterItem} from './filterdialog/filterdialog.component'
 export interface Deal{
   id: number;
   name: string;
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   displayedColumns: string[] = ['id','name','summ','inn','type'];
   dataSource = new MatTableDataSource(deals);
   private cookieSize: any;
-  filterChoosedConfs:any;
+  filterChoosedConfs:ConfFilterItem[]=[];
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: true}) sort: MatSort;
@@ -227,6 +228,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     dialogRef.afterClosed().subscribe(result => {
       console.log("Filter config: "+JSON.stringify(result));
       if(result){
+        this.filterChoosedConfs = result;
         this.dataSource.filterPredicate = this.createFilter(result);
         this.dataSource.filter = "starting run filter string";
       }
@@ -289,11 +291,28 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     return res;
   }
   setOffFilter(){
+    this.filterChoosedConfs = [];
     this.dataSource.filterPredicate = (data: Deal, filter: string):boolean =>{return true;}
     this.dataSource.filter = "starting run filter string";
 
   }
 
+  showedFilterStatus(){
+    if(!this.filterChoosedConfs || this.filterChoosedConfs.length==0)
+      return "No filter";
+    let resText:string = "";
+    for(let conf of this.filterChoosedConfs){
+      if(conf.boolOper){
+        resText+=" "+conf.boolOper;
+      }
+      resText+=" "+conf.field;
+      resText+=" "+conf.filterType;
+      resText+=" by ";
+      resText+=" "+conf.filterText;
+      
+    }
+    return resText;
+  }
   
 
 }

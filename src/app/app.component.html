@@ -1,7 +1,12 @@
-<button mat-button (click)="filterButtonClick()">Filter</button>
-<button mat-button (click)="setOffFilter()">Set off filter</button>
+<p><button mat-button (click)="filterButtonClick()">Filter</button>
+  <button mat-button (click)="setOffFilter()">Set off filter</button></p>
+<p>Using filter:{{showedFilterStatus()}}</p>
+
+
 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" (page)="handleChangePage($event)" ></mat-paginator>
+
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup matSort (matSortChange)="sortData($event)">
+ 
    <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
     <mat-header-cell *matHeaderCellDef 
     (mousedown)="onResizeColumn($event, i)"
@@ -12,4 +17,9 @@
   </ng-container> 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" ></mat-row>
+
+
+  
+    
+ 
 </mat-table>

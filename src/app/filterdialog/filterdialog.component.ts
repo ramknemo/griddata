@@ -6,7 +6,7 @@ export interface DialogData {
   columns:any;
   selectedValue:string;
 }
-interface ConfFilterItem {
+export interface ConfFilterItem {
   filterText:string;
   filterType:string;
   field:string;
