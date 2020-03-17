@@ -278,6 +278,15 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       case TextFilterType.CONSIST():
         res = valFromTable.includes(value);
         break;
+      case TextFilterType.EQUALS():
+        res = valFromTable.includes(value) && valFromTable.length==value.trim().length;
+        break;
+      case TextFilterType.NO_EQUALS():
+        res = !(valFromTable.includes(value) && valFromTable.length==value.trim().length);
+        break;
+      case TextFilterType.NO_CONSIST():
+        res = !valFromTable.includes(value);
+        break;
       case NumberFilterType.BIGGER():
         res = parseInt(value)>parseInt(valFromTable);
         break; 

@@ -1,5 +1,11 @@
 export class TextFilterType {
-    private static types:string[]=[TextFilterType.CONSIST(),TextFilterType.BEGIN(),TextFilterType.END()];
+    private static types:string[]=[
+        TextFilterType.CONSIST(),
+        TextFilterType.BEGIN(),
+        TextFilterType.END(),
+        TextFilterType.EQUALS(),
+        TextFilterType.NO_EQUALS(),
+        TextFilterType.NO_CONSIST()];
     static CONSIST(){
         return "CONSIST";
     }
@@ -9,6 +15,15 @@ export class TextFilterType {
     static END(){
         return "END";
     }
+    static EQUALS(){
+        return "EQUALS";
+    }
+    static NO_EQUALS(){
+        return "NO_EQUALS";
+    }
+    static NO_CONSIST(){
+        return "NO_CONSIST";
+    }
     static getAllTypes():string[]{
         return TextFilterType.types;
     }
@@ -17,7 +32,9 @@ export class TextFilterType {
 
 
 export class NumberFilterType {
-    private static types:string[]=[NumberFilterType.BIGGER(),NumberFilterType.SlOWER(),NumberFilterType.EQUALS()];
+    private static types:string[]=[NumberFilterType.BIGGER(),
+        NumberFilterType.SlOWER(),
+        NumberFilterType.EQUALS()];
     static BIGGER(){
         return "BIGGER";
     }

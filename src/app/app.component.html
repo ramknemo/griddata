@@ -1,6 +1,6 @@
 <p><button mat-button (click)="filterButtonClick()">Filter</button>
   <button mat-button (click)="setOffFilter()">Set off filter</button></p>
-<p>Using filter:{{showedFilterStatus()}}</p>
+<p></p>
 
 
 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" (page)="handleChangePage($event)" ></mat-paginator>
@@ -15,11 +15,22 @@
     </mat-header-cell>
     <mat-cell *matCellDef="let row;let i = index;"  > {{ row[column.field] }}  </mat-cell>
   </ng-container> 
+
+  <!-- <ng-container matColumnDef="header-row-second-group">
+    
+    <mat-header-cell > Second group </mat-header-cell>
+  </ng-container> -->
+
+  <!-- <mat-header-row *matHeaderRowDef="['header-row-second-group']"></mat-header-row> -->
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" ></mat-row>
-
-
   
-    
- 
 </mat-table>
+
+
+<div style="min-height: 100%;">
+  <!-- Taking full size for allowing sticky footer -->
+</div>
+<div class="useSticky">
+  Using filter:{{showedFilterStatus()}}
+</div>
