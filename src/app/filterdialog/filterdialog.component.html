@@ -1,7 +1,7 @@
 <div mat-dialog-content>
     <p>Choose filter attributes</p>
     <p *ngFor="let conf of filterChoosedConfs;let ind=index;">
-      {{ind}}
+      {{ind+1}}
       <mat-form-field *ngIf="ind>0">
         <mat-label>Bool</mat-label>
         <mat-select [(ngModel)]="conf.boolOper" name="boolOper">
@@ -38,23 +38,30 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
-        <mat-label>Filter text</mat-label>
-        <input matInput [(ngModel)]="conf.filterText">
-      </mat-form-field>
-      
+
+      <ng-container *ngIf="conf.field && getTypeOfField(conf.field) === 'number' && conf.filterType==='BETWEEN'; else newDeb">
+        <mat-form-field>
+          <mat-label>Min value</mat-label>
+          <input matInput [(ngModel)]="conf.minValue">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Max value</mat-label>
+          <input matInput [(ngModel)]="conf.maxValue">
+        </mat-form-field>
+      </ng-container>
+      <ng-template #newDeb>
+        <mat-form-field>
+          <mat-label>Filter text</mat-label>
+          <input matInput [(ngModel)]="conf.filterText">
+        </mat-form-field>
+      </ng-template>
+
     </p>
-
-
-
-
+    <div style="color: red;">{{errorString}}</div>
     <button mat-button (click)="addClickHandler()">Add</button>
     <button mat-button (click)="removeCLickHandler()">Remove</button>
-
-
-
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="filterChoosedConfs" cdkFocusInitial>Apply</button>
+    <button mat-button (click)="applyButtonClickHandler()" cdkFocusInitial>Apply</button>
   </div>

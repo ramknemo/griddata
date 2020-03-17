@@ -68,6 +68,16 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       this.dataSource.sort.direction = cookieSort.direction;
       this.dataSource.sort.active = cookieSort.active;
     }
+
+    if(this.cookieService.get("filterConfig")){
+      this.filterChoosedConfs = JSON.parse(this.cookieService.get("filterConfig"));
+      if(this.filterChoosedConfs.length==0){
+        this.dataSource.filterPredicate = (data: Deal, filter: string):boolean =>{return true;}
+      }else{
+        this.dataSource.filterPredicate = this.createFilter(this.filterChoosedConfs);
+      }
+      this.dataSource.filter = "starting run filter string";
+    }
   }
 
   ngAfterViewChecked() {
@@ -221,7 +231,8 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     const dialogRef = this.dialog.open(FilterDialogComponent, {
       width: '750px',
       data: {
-        columns:this.columns
+        columns:this.columns,
+        filterChoosedConfs:this.filterChoosedConfs
       }
     });
 
@@ -231,19 +242,20 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
         this.filterChoosedConfs = result;
         this.dataSource.filterPredicate = this.createFilter(result);
         this.dataSource.filter = "starting run filter string";
+        this.cookieService.set("filterConfig",JSON.stringify(this.filterChoosedConfs));  
       }
     });
   }
 
   //returns filter function
-  createFilter(filterChoosedConfs: any[]) {
+  createFilter(filterChoosedConfs: ConfFilterItem[]) {
     return (data: Deal, filter: string):boolean => {
       let resExp: string = "";
       if (filterChoosedConfs.length == 0) {
         return false;
       }
       let curUsedField = filterChoosedConfs[0].field;
-      resExp += "" + this.predSmall(data[curUsedField], filterChoosedConfs[0].filterType, filterChoosedConfs[0].filterText);
+      resExp += "" + this.predSmall(data[curUsedField], filterChoosedConfs[0].filterType, filterChoosedConfs[0].filterText,filterChoosedConfs[0]);
       if (filterChoosedConfs.length > 1) {
         for (let i = 1; i < filterChoosedConfs.length; i++) {
           switch (filterChoosedConfs[i].boolOper) {
@@ -255,7 +267,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
               break;
           }
           curUsedField = filterChoosedConfs[i].field;
-          resExp += "" + this.predSmall(data[curUsedField], filterChoosedConfs[i].filterType, filterChoosedConfs[i].filterText);
+          resExp += "" + this.predSmall(data[curUsedField], filterChoosedConfs[i].filterType, filterChoosedConfs[i].filterText,filterChoosedConfs[i]);
 
         }
       }
@@ -265,7 +277,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
   }
 
   /*Val - column value of extact line, oper - filter settings*/
-  predSmall(valFromTable:string, operType:string, value:string):boolean {
+  predSmall(valFromTable:string, operType:string, value:string, conf:ConfFilterItem):boolean {
     //console.log("pred val="+val);
     let res:boolean = false;
     switch(operType){
@@ -288,13 +300,16 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
         res = !valFromTable.includes(value);
         break;
       case NumberFilterType.BIGGER():
-        res = parseInt(value)>parseInt(valFromTable);
+        res = parseInt(value)<parseInt(valFromTable);
         break; 
       case NumberFilterType.SlOWER():
-        res = parseInt(value)<parseInt(valFromTable) 
+        res = parseInt(value)>parseInt(valFromTable);
         break; 
       case NumberFilterType.EQUALS(): 
-        res = parseInt(value)==parseInt(valFromTable)
+        res = parseInt(value)==parseInt(valFromTable);
+        break;
+      case NumberFilterType.BETWEEN(): 
+        res = parseInt(valFromTable)<parseInt(conf.maxValue) && parseInt(valFromTable)>parseInt(conf.minValue);
         break;
     }
     return res;
@@ -303,6 +318,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
     this.filterChoosedConfs = [];
     this.dataSource.filterPredicate = (data: Deal, filter: string):boolean =>{return true;}
     this.dataSource.filter = "starting run filter string";
+    this.cookieService.set("filterConfig",JSON.stringify(this.filterChoosedConfs));  
 
   }
 
@@ -316,9 +332,15 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       }
       resText+=" "+conf.field;
       resText+=" "+conf.filterType;
-      resText+=" by ";
-      resText+=" "+conf.filterText;
       
+      if(conf.filterType==="BETWEEN"){
+        resText+=" from ";
+        resText+=conf.minValue;
+        resText+=" to ";
+        resText+=conf.maxValue;
+      }else{ 
+        resText+=" "+conf.filterText;
+      }
     }
     return resText;
   }
