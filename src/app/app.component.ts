@@ -78,6 +78,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       }
       this.dataSource.filter = "starting run filter string";
     }
+    this.setTableMinWidth();
   }
 
   ngAfterViewChecked() {
@@ -100,11 +101,11 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
 
 
   columns: any[] = [
-    { field: 'id', width: 100,  },
-    { field: 'name', width: 150, },
-    { field: 'summ', width: 250, },
-    { field: 'inn', width: 300, },
-    { field: 'type', width: 100, }
+    { field: 'id', width: 100, minWidth:100 },
+    { field: 'name', width: 150, minWidth:100 },
+    { field: 'summ', width: 250, minWidth:100 },
+    { field: 'inn', width: 300, minWidth:200 },
+    { field: 'type', width: 100, minWidth:100 }
   ];
   
 
@@ -343,6 +344,16 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       }
     }
     return resText;
+  }
+
+
+  setTableMinWidth(){
+    let totMinWidth = 0;
+    this.columns.forEach(( column) => {
+      totMinWidth += column.minWidth;
+    });
+    const columnEls = Array.from( document.getElementsByClassName('mat-table') );
+    this.renderer.setStyle(columnEls[0],"min-width",totMinWidth + 'px');
   }
   
 
