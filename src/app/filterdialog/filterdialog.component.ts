@@ -48,6 +48,7 @@ export class FilterDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
       if(data.filterChoosedConfs.length>=1)
         this.filterChoosedConfs=data.filterChoosedConfs;
+      console.log("I worked");
 
   }
 

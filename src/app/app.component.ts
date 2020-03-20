@@ -2,7 +2,6 @@ import { Component, OnChanges, SimpleChanges, OnInit,AfterViewChecked, ViewChild
 import {Sort} from '@angular/material/sort';
 import { HttpClient} from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DialogGotoComponent} from './subcomps/dialoggoto.component'
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {data} from "./data"
@@ -25,7 +24,7 @@ export interface Deal{
 const deals: Deal[] = data;
 
 @Component({
-  selector: 'app-root',
+  selector: 'nemo-data-table',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
   
@@ -306,7 +305,7 @@ export class AppComponent implements OnInit,AfterViewInit,AfterViewChecked{
       case NumberFilterType.SlOWER():
         res = parseInt(value)>parseInt(valFromTable);
         break; 
-      case NumberFilterType.EQUALS(): 
+      case NumberFilterType.EQUAL(): 
         res = parseInt(value)==parseInt(valFromTable);
         break;
       case NumberFilterType.BETWEEN(): 

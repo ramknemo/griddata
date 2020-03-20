@@ -34,7 +34,7 @@ export class TextFilterType {
 export class NumberFilterType {
     private static types:string[]=[NumberFilterType.BIGGER(),
         NumberFilterType.SlOWER(),
-        NumberFilterType.EQUALS(),
+        NumberFilterType.EQUAL(),
         NumberFilterType.BETWEEN()];
     static BIGGER(){
         return "BIGGER";
@@ -42,8 +42,8 @@ export class NumberFilterType {
     static SlOWER(){
         return "SlOWER";
     }
-    static EQUALS(){
-        return "EQUALS";
+    static EQUAL(){
+        return "EQUAL";
     }
     static BETWEEN(){
         return "BETWEEN";
